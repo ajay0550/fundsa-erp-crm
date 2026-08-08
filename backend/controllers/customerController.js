@@ -225,11 +225,93 @@ const deleteCustomer = async (req, res) => {
     }
 };
 
+const addFollowUp = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { note, follow_up_date } = req.body;
+
+        if (!note) {
+            return res.status(400).json({
+                message: "Follow-up note is required"
+            });
+        }
+
+        const customer = await pool.query(
+            "SELECT id FROM customers WHERE id = $1",
+            [id]
+        );
+
+        if (customer.rows.length === 0) {
+            return res.status(404).json({
+                message: "Customer not found"
+            });
+        }
+
+        const result = await pool.query(
+            `INSERT INTO follow_ups
+            (customer_id, note, follow_up_date, created_by)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *`,
+            [
+                id,
+                note,
+                follow_up_date,
+                req.user.id
+            ]
+        );
+
+        res.status(201).json({
+            message: "Follow-up added successfully",
+            follow_up: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to add follow-up"
+        });
+    }
+};
+
+
+const getFollowUps = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const result = await pool.query(
+            `SELECT
+                f.*,
+                u.name AS created_by_name
+             FROM follow_ups f
+             LEFT JOIN users u
+             ON f.created_by = u.id
+             WHERE f.customer_id = $1
+             ORDER BY f.created_at DESC`,
+            [id]
+        );
+
+        res.status(200).json({
+            count: result.rows.length,
+            follow_ups: result.rows
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to fetch follow-ups"
+        });
+    }
+};
+
 
 module.exports = {
     createCustomer,
     getCustomers,
     getCustomerById,
     updateCustomer,
-    deleteCustomer
+    deleteCustomer,
+    addFollowUp,
+    getFollowUps
 };

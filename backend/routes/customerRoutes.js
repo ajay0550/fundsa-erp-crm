@@ -5,7 +5,9 @@ const {
     getCustomers,
     getCustomerById,
     updateCustomer,
-    deleteCustomer
+    deleteCustomer,
+    addFollowUp,
+    getFollowUps
 } = require("../controllers/customerController");
 
 const {
@@ -21,5 +23,7 @@ router.get("/", getCustomers);
 router.get("/:id", getCustomerById);
 router.put("/:id", updateCustomer);
 router.delete("/:id", deleteCustomer);
+router.post("/:id/follow-ups", addFollowUp);
+router.get("/:id/follow-ups", getFollowUps);
 
 module.exports = router;
