@@ -1,4 +1,4 @@
--- Users / Employees
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE users (
 );
 
 
--- Customers
+
 CREATE TABLE customers (
     id SERIAL PRIMARY KEY,
     customer_name VARCHAR(150) NOT NULL,
@@ -29,7 +29,6 @@ CREATE TABLE customers (
 );
 
 
--- CRM Follow-ups
 CREATE TABLE follow_ups (
     id SERIAL PRIMARY KEY,
     customer_id INTEGER NOT NULL
@@ -42,7 +41,7 @@ CREATE TABLE follow_ups (
 );
 
 
--- Products / Inventory
+
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     product_name VARCHAR(150) NOT NULL,
@@ -59,7 +58,7 @@ CREATE TABLE products (
 );
 
 
--- Stock Movement History
+
 CREATE TABLE stock_movements (
     id SERIAL PRIMARY KEY,
     product_id INTEGER NOT NULL
@@ -75,7 +74,7 @@ CREATE TABLE stock_movements (
 );
 
 
--- Sales Challans
+
 CREATE TABLE challans (
     id SERIAL PRIMARY KEY,
     challan_number VARCHAR(50) UNIQUE NOT NULL,
@@ -90,7 +89,7 @@ CREATE TABLE challans (
 );
 
 
--- Products inside each Challan
+
 CREATE TABLE challan_items (
     id SERIAL PRIMARY KEY,
     challan_id INTEGER NOT NULL
