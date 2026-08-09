@@ -13,7 +13,7 @@ const createChallan = async (req, res) => {
             });
         }
 
-     
+
         const customerResult = await client.query(
             "SELECT * FROM customers WHERE id = $1",
             [customer_id]
@@ -27,7 +27,7 @@ const createChallan = async (req, res) => {
 
         await client.query("BEGIN");
 
-      
+
         const challanNumber = `CH-${Date.now()}`;
 
         const challanResult = await client.query(
@@ -214,7 +214,7 @@ const confirmChallan = async (req, res) => {
 
         await client.query("BEGIN");
 
-      
+
         const challanResult = await client.query(
             `SELECT *
              FROM challans
@@ -256,7 +256,7 @@ const confirmChallan = async (req, res) => {
             });
         }
 
-       
+
         for (const item of itemsResult.rows) {
 
             const productResult = await client.query(
@@ -287,7 +287,7 @@ const confirmChallan = async (req, res) => {
             }
         }
 
-    
+
         for (const item of itemsResult.rows) {
 
             await client.query(
@@ -322,9 +322,21 @@ const confirmChallan = async (req, res) => {
 
         const updatedChallan = await client.query(
             `UPDATE challans
-             SET status = 'CONFIRMED'
-             WHERE id = $1
-             RETURNING *`,
+     SET status = 'CONFIRMED'
+     WHERE id = $1
+     RETURNING *`,
+            [id]
+        );
+
+        const completeChallan = await client.query(
+            `SELECT
+        c.*,
+        cu.customer_name,
+        cu.business_name
+     FROM challans c
+     JOIN customers cu
+     ON c.customer_id = cu.id
+     WHERE c.id = $1`,
             [id]
         );
 
@@ -332,7 +344,7 @@ const confirmChallan = async (req, res) => {
 
         res.status(200).json({
             message: "Challan confirmed successfully",
-            challan: updatedChallan.rows[0]
+            challan: completeChallan.rows[0]
         });
 
     } catch (error) {

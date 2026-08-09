@@ -31,7 +31,6 @@ router.get(
 
 router.get(
     "/movements",
-    authorizeRoles("ADMIN", "WAREHOUSE", "ACCOUNTS"),
     getStockMovements
 );
 
