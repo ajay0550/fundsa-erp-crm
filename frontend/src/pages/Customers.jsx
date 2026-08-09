@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import API_URL from "../services/api";
+import { hasRole } from "../utils/auth";
+
 
 const emptyForm = {
     customer_name: "",
@@ -15,6 +17,7 @@ const emptyForm = {
     notes: ""
 };
 
+
 export default function Customers() {
 
     const [customers, setCustomers] = useState([]);
@@ -22,38 +25,54 @@ export default function Customers() {
     const [error, setError] = useState("");
 
     const [showForm, setShowForm] = useState(false);
-    const [editingCustomer, setEditingCustomer] = useState(null);
+    const [editingCustomer, setEditingCustomer] =
+        useState(null);
 
-    const [formData, setFormData] = useState(emptyForm);
+    const [formData, setFormData] =
+        useState(emptyForm);
 
 
-    // GET customers
+    // ==========================================
+    // GET CUSTOMERS
+    // ==========================================
+
     useEffect(() => {
 
         const loadCustomers = async () => {
 
             try {
 
-                const token = localStorage.getItem("token");
+                const token =
+                    localStorage.getItem("token");
 
                 const response = await fetch(
                     `${API_URL}/customers`,
                     {
                         headers: {
-                            Authorization: `Bearer ${token}`
+                            Authorization:
+                                `Bearer ${token}`
                         }
                     }
                 );
 
-                const data = await response.json();
+
+                const data =
+                    await response.json();
+
 
                 if (!response.ok) {
+
                     throw new Error(
-                        data.message || "Failed to load customers"
+                        data.message ||
+                        "Failed to load customers"
                     );
                 }
 
-                setCustomers(data.customers);
+
+                setCustomers(
+                    data.customers
+                );
+
 
             } catch (error) {
 
@@ -66,15 +85,23 @@ export default function Customers() {
             }
         };
 
+
         loadCustomers();
 
     }, []);
 
 
-    // Handle form input
+    // ==========================================
+    // HANDLE FORM INPUT
+    // ==========================================
+
     const handleChange = (e) => {
 
-        const { name, value } = e.target;
+        const {
+            name,
+            value
+        } = e.target;
+
 
         setFormData({
             ...formData,
@@ -83,7 +110,10 @@ export default function Customers() {
     };
 
 
-    // Open Add form
+    // ==========================================
+    // OPEN ADD FORM
+    // ==========================================
+
     const openAddForm = () => {
 
         setEditingCustomer(null);
@@ -96,30 +126,59 @@ export default function Customers() {
     };
 
 
-    // Open Edit form
+    // ==========================================
+    // OPEN EDIT FORM
+    // ==========================================
+
     const openEditForm = (customer) => {
 
         setEditingCustomer(customer);
 
         setFormData({
-            customer_name: customer.customer_name || "",
-            mobile: customer.mobile || "",
-            email: customer.email || "",
-            business_name: customer.business_name || "",
-            gst_number: customer.gst_number || "",
-            customer_type: customer.customer_type || "RETAIL",
-            address: customer.address || "",
-            status: customer.status || "LEAD",
 
-            // Convert PostgreSQL date/timestamp to yyyy-mm-dd
-            follow_up_date: customer.follow_up_date
-                ? new Date(customer.follow_up_date)
-                    .toISOString()
-                    .split("T")[0]
-                : "",
+            customer_name:
+                customer.customer_name || "",
 
-            notes: customer.notes || ""
+            mobile:
+                customer.mobile || "",
+
+            email:
+                customer.email || "",
+
+            business_name:
+                customer.business_name || "",
+
+            gst_number:
+                customer.gst_number || "",
+
+            customer_type:
+                customer.customer_type ||
+                "RETAIL",
+
+            address:
+                customer.address || "",
+
+            status:
+                customer.status || "LEAD",
+
+
+            // Convert PostgreSQL date/timestamp
+            // to yyyy-mm-dd
+
+            follow_up_date:
+                customer.follow_up_date
+                    ? new Date(
+                        customer.follow_up_date
+                    )
+                        .toISOString()
+                        .split("T")[0]
+                    : "",
+
+            notes:
+                customer.notes || ""
+
         });
+
 
         setError("");
 
@@ -127,18 +186,26 @@ export default function Customers() {
     };
 
 
-    // Add OR Update customer
+    // ==========================================
+    // ADD OR UPDATE CUSTOMER
+    // ==========================================
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
         try {
 
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
+
 
             const url = editingCustomer
+
                 ? `${API_URL}/customers/${editingCustomer.id}`
+
                 : `${API_URL}/customers`;
+
 
             const method = editingCustomer
                 ? "PUT"
@@ -151,16 +218,23 @@ export default function Customers() {
                     method: method,
 
                     headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
+
+                        "Content-Type":
+                            "application/json",
+
+                        Authorization:
+                            `Bearer ${token}`
                     },
 
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(
+                        formData
+                    )
                 }
             );
 
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
 
             if (!response.ok) {
@@ -176,50 +250,77 @@ export default function Customers() {
             }
 
 
+            // UPDATE
+
             if (editingCustomer) {
 
-                // Replace the edited customer
                 setCustomers(
-                    customers.map((customer) =>
-                        customer.id === editingCustomer.id
-                            ? data.customer
-                            : customer
+
+                    customers.map(
+                        (customer) =>
+
+                            customer.id ===
+                            editingCustomer.id
+
+                                ? data.customer
+
+                                : customer
                     )
+
                 );
 
-            } else {
+            }
 
-                // Add new customer at top
+
+            // ADD
+
+            else {
+
                 setCustomers([
+
                     data.customer,
+
                     ...customers
+
                 ]);
+
             }
 
 
             // Close form
+
             setShowForm(false);
 
+
             // Reset
+
             setEditingCustomer(null);
 
             setFormData(emptyForm);
 
             setError("");
 
+
         } catch (error) {
 
-            setError(error.message);
+            setError(
+                error.message
+            );
         }
     };
 
 
-    // Delete customer
+    // ==========================================
+    // DELETE CUSTOMER
+    // ==========================================
+
     const handleDelete = async (id) => {
 
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this customer?"
-        );
+        const confirmed =
+            window.confirm(
+                "Are you sure you want to delete this customer?"
+            );
+
 
         if (!confirmed) {
             return;
@@ -228,7 +329,9 @@ export default function Customers() {
 
         try {
 
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
+
 
             const response = await fetch(
                 `${API_URL}/customers/${id}`,
@@ -236,57 +339,87 @@ export default function Customers() {
                     method: "DELETE",
 
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization:
+                            `Bearer ${token}`
                     }
                 }
             );
 
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
 
             if (!response.ok) {
 
                 throw new Error(
-                    data.message || "Failed to delete customer"
+                    data.message ||
+                    "Failed to delete customer"
                 );
             }
 
 
-            // Remove customer from React state
+            // Remove customer
+
             setCustomers(
+
                 customers.filter(
-                    (customer) => customer.id !== id
+                    (customer) =>
+                        customer.id !== id
                 )
+
             );
+
 
         } catch (error) {
 
-            setError(error.message);
+            setError(
+                error.message
+            );
         }
     };
 
 
+    // ==========================================
+    // LOADING
+    // ==========================================
+
     if (loading) {
 
         return (
+
             <Layout>
-                <p>Loading customers...</p>
+
+                <p>
+                    Loading customers...
+                </p>
+
             </Layout>
+
         );
     }
 
 
+    // ==========================================
+    // PAGE
+    // ==========================================
+
     return (
+
         <Layout>
 
-            {/* HEADER */}
+
+            {/* ==================================
+                HEADER
+            ================================== */}
 
             <div className="page-header">
 
                 <div>
 
-                    <h2>Customers</h2>
+                    <h2>
+                        Customers
+                    </h2>
 
                     <p>
                         Manage your customers and relationships
@@ -295,273 +428,451 @@ export default function Customers() {
                 </div>
 
 
-                <button
-                    className="primary-button"
-                    onClick={openAddForm}
-                >
-                    Add Customer
-                </button>
+                {/* ADMIN + SALES ONLY */}
+
+                {hasRole(
+                    "ADMIN",
+                    "SALES"
+                ) && (
+
+                    <button
+                        className="primary-button"
+                        onClick={openAddForm}
+                    >
+                        Add Customer
+                    </button>
+
+                )}
 
             </div>
 
 
-            {/* ERROR */}
+            {/* ==================================
+                ERROR
+            ================================== */}
 
             {error && (
 
                 <div className="error-message">
+
                     {error}
-                </div>
-
-            )}
-
-
-            {/* FORM */}
-
-            {showForm && (
-
-                <div className="dashboard-card customer-form">
-
-                    <h3>
-                        {editingCustomer
-                            ? "Edit Customer"
-                            : "Add Customer"
-                        }
-                    </h3>
-
-
-                    <form onSubmit={handleSubmit}>
-
-                        <div className="customer-form-grid">
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Customer Name
-                                </label>
-
-                                <input
-                                    name="customer_name"
-                                    placeholder="Enter customer name"
-                                    value={formData.customer_name}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Mobile
-                                </label>
-
-                                <input
-                                    name="mobile"
-                                    placeholder="Enter mobile number"
-                                    value={formData.mobile}
-                                    onChange={handleChange}
-                                    required
-                                />
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Email
-                                </label>
-
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Enter email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                />
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Business Name
-                                </label>
-
-                                <input
-                                    name="business_name"
-                                    placeholder="Enter business name"
-                                    value={formData.business_name}
-                                    onChange={handleChange}
-                                />
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    GST Number
-                                </label>
-
-                                <input
-                                    name="gst_number"
-                                    placeholder="Enter GST number"
-                                    value={formData.gst_number}
-                                    onChange={handleChange}
-                                />
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Customer Type
-                                </label>
-
-                                <select
-                                    name="customer_type"
-                                    value={formData.customer_type}
-                                    onChange={handleChange}
-                                >
-
-                                    <option value="RETAIL">
-                                        Retail
-                                    </option>
-
-                                    <option value="WHOLESALE">
-                                        Wholesale
-                                    </option>
-
-                                    <option value="DISTRIBUTOR">
-                                        Distributor
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Address
-                                </label>
-
-                                <input
-                                    name="address"
-                                    placeholder="Enter address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                />
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Status
-                                </label>
-
-                                <select
-                                    name="status"
-                                    value={formData.status}
-                                    onChange={handleChange}
-                                >
-
-                                    <option value="LEAD">
-                                        Lead
-                                    </option>
-
-                                    <option value="ACTIVE">
-                                        Active
-                                    </option>
-
-                                    <option value="INACTIVE">
-                                        Inactive
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                            <div className="form-group">
-
-                                <label>
-                                    Follow-up Date
-                                </label>
-
-                                <input
-                                    type="date"
-                                    name="follow_up_date"
-                                    value={formData.follow_up_date}
-                                    onChange={handleChange}
-                                />
-
-                            </div>
-
-
-                            <div className="form-group full-width">
-
-                                <label>
-                                    Notes
-                                </label>
-
-                                <textarea
-                                    name="notes"
-                                    placeholder="Enter notes"
-                                    value={formData.notes}
-                                    onChange={handleChange}
-                                />
-
-                            </div>
-
-                        </div>
-
-
-                        <div className="customer-form-actions">
-
-                            <button
-                                type="button"
-                                className="secondary-button"
-                                onClick={() => {
-                                    setShowForm(false);
-                                    setEditingCustomer(null);
-                                }}
-                            >
-                                Cancel
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                className="primary-button"
-                            >
-                                {editingCustomer
-                                    ? "Save Changes"
-                                    : "Add Customer"
-                                }
-                            </button>
-
-                        </div>
-
-                    </form>
 
                 </div>
 
             )}
 
 
-            {/* CUSTOMER TABLE */}
+            {/* ==================================
+                FORM
+                ADMIN + SALES ONLY
+            ================================== */}
 
-            <div className="dashboard-card">
+            {showForm &&
+                hasRole(
+                    "ADMIN",
+                    "SALES"
+                ) && (
+
+                    <div
+                        className=
+                            "dashboard-card customer-form"
+                    >
+
+                        <h3>
+
+                            {editingCustomer
+                                ? "Edit Customer"
+                                : "Add Customer"
+                            }
+
+                        </h3>
+
+
+                        <form
+                            onSubmit={
+                                handleSubmit
+                            }
+                        >
+
+                            <div
+                                className=
+                                    "customer-form-grid"
+                            >
+
+
+                                {/* CUSTOMER NAME */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Customer Name
+                                    </label>
+
+                                    <input
+                                        name=
+                                            "customer_name"
+                                        placeholder=
+                                            "Enter customer name"
+                                        value={
+                                            formData
+                                                .customer_name
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+
+                                {/* MOBILE */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Mobile
+                                    </label>
+
+                                    <input
+                                        name="mobile"
+                                        placeholder=
+                                            "Enter mobile number"
+                                        value={
+                                            formData.mobile
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+
+                                {/* EMAIL */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Email
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder=
+                                            "Enter email"
+                                        value={
+                                            formData.email
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* BUSINESS */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Business Name
+                                    </label>
+
+                                    <input
+                                        name=
+                                            "business_name"
+                                        placeholder=
+                                            "Enter business name"
+                                        value={
+                                            formData
+                                                .business_name
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* GST */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        GST Number
+                                    </label>
+
+                                    <input
+                                        name=
+                                            "gst_number"
+                                        placeholder=
+                                            "Enter GST number"
+                                        value={
+                                            formData
+                                                .gst_number
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* CUSTOMER TYPE */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Customer Type
+                                    </label>
+
+                                    <select
+                                        name=
+                                            "customer_type"
+                                        value={
+                                            formData
+                                                .customer_type
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    >
+
+                                        <option
+                                            value="RETAIL"
+                                        >
+                                            Retail
+                                        </option>
+
+                                        <option
+                                            value="WHOLESALE"
+                                        >
+                                            Wholesale
+                                        </option>
+
+                                        <option
+                                            value=
+                                                "DISTRIBUTOR"
+                                        >
+                                            Distributor
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                {/* ADDRESS */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Address
+                                    </label>
+
+                                    <input
+                                        name="address"
+                                        placeholder=
+                                            "Enter address"
+                                        value={
+                                            formData
+                                                .address
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* STATUS */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Status
+                                    </label>
+
+                                    <select
+                                        name="status"
+                                        value={
+                                            formData
+                                                .status
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    >
+
+                                        <option
+                                            value="LEAD"
+                                        >
+                                            Lead
+                                        </option>
+
+                                        <option
+                                            value="ACTIVE"
+                                        >
+                                            Active
+                                        </option>
+
+                                        <option
+                                            value="INACTIVE"
+                                        >
+                                            Inactive
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                {/* FOLLOW UP */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Follow-up Date
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        name=
+                                            "follow_up_date"
+                                        value={
+                                            formData
+                                                .follow_up_date
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* NOTES */}
+
+                                <div
+                                    className=
+                                        "form-group full-width"
+                                >
+
+                                    <label>
+                                        Notes
+                                    </label>
+
+                                    <textarea
+                                        name="notes"
+                                        placeholder=
+                                            "Enter notes"
+                                        value={
+                                            formData.notes
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            {/* FORM BUTTONS */}
+
+                            <div
+                                className=
+                                    "customer-form-actions"
+                            >
+
+                                <button
+                                    type="button"
+                                    className=
+                                        "secondary-button"
+                                    onClick={() => {
+
+                                        setShowForm(
+                                            false
+                                        );
+
+                                        setEditingCustomer(
+                                            null
+                                        );
+
+                                        setFormData(
+                                            emptyForm
+                                        );
+
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+
+
+                                <button
+                                    type="submit"
+                                    className=
+                                        "primary-button"
+                                >
+
+                                    {editingCustomer
+                                        ? "Save Changes"
+                                        : "Add Customer"
+                                    }
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                )}
+
+
+            {/* ==================================
+                CUSTOMER TABLE
+            ================================== */}
+
+            <div
+                className="dashboard-card"
+            >
 
                 <table>
 
@@ -569,12 +880,29 @@ export default function Customers() {
 
                         <tr>
 
-                            <th>Customer</th>
-                            <th>Business</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Follow-up</th>
-                            <th>Actions</th>
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Business
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Follow-up
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
 
                         </tr>
 
@@ -583,67 +911,113 @@ export default function Customers() {
 
                     <tbody>
 
-                        {customers.map((customer) => (
+                        {customers.map(
+                            (customer) => (
 
-                            <tr key={customer.id}>
-
-                                <td>
-                                    {customer.customer_name}
-                                </td>
-
-                                <td>
-                                    {customer.business_name}
-                                </td>
-
-                                <td>
-                                    {customer.customer_type}
-                                </td>
-
-                                <td>
-                                    {customer.status}
-                                </td>
-
-                                <td>
-                                    {customer.follow_up_date
-                                        ? new Date(
-                                            customer.follow_up_date
-                                        ).toLocaleDateString(
-                                            "en-IN"
-                                        )
-                                        : "—"
+                                <tr
+                                    key={
+                                        customer.id
                                     }
-                                </td>
+                                >
 
-                                <td>
-
-                                    <div className="action-buttons">
-
-                                        <button
-                                            className="edit-button"
-                                            onClick={() =>
-                                                openEditForm(customer)
-                                            }
-                                        >
-                                            Edit
-                                        </button>
+                                    <td>
+                                        {
+                                            customer
+                                                .customer_name
+                                        }
+                                    </td>
 
 
-                                        <button
-                                            className="delete-button"
-                                            onClick={() =>
-                                                handleDelete(customer.id)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
+                                    <td>
+                                        {
+                                            customer
+                                                .business_name
+                                        }
+                                    </td>
 
-                                    </div>
 
-                                </td>
+                                    <td>
+                                        {
+                                            customer
+                                                .customer_type
+                                        }
+                                    </td>
 
-                            </tr>
 
-                        ))}
+                                    <td>
+                                        {
+                                            customer
+                                                .status
+                                        }
+                                    </td>
+
+
+                                    <td>
+
+                                        {
+                                            customer
+                                                .follow_up_date
+
+                                            ? new Date(
+                                                customer
+                                                    .follow_up_date
+                                            ).toLocaleDateString(
+                                                "en-IN"
+                                            )
+
+                                            : "—"
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {hasRole(
+                                            "ADMIN",
+                                            "SALES"
+                                        ) && (
+
+                                            <div
+                                                className=
+                                                    "action-buttons"
+                                            >
+
+                                                <button
+                                                    className=
+                                                        "edit-button"
+                                                    onClick={() =>
+                                                        openEditForm(
+                                                            customer
+                                                        )
+                                                    }
+                                                >
+                                                    Edit
+                                                </button>
+
+
+                                                <button
+                                                    className=
+                                                        "delete-button"
+                                                    onClick={() =>
+                                                        handleDelete(
+                                                            customer.id
+                                                        )
+                                                    }
+                                                >
+                                                    Delete
+                                                </button>
+
+                                            </div>
+
+                                        )}
+
+                                    </td>
+
+                                </tr>
+
+                            )
+                        )}
 
                     </tbody>
 

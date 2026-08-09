@@ -9,9 +9,6 @@ export default function Sidebar() {
     const role = getUserRole();
 
 
-    // ==========================================
-    // LOGOUT
-    // ==========================================
 
     const handleLogout = () => {
 
@@ -20,10 +17,6 @@ export default function Sidebar() {
         navigate("/login");
     };
 
-
-    // ==========================================
-    // USER DETAILS
-    // ==========================================
 
     const userName =
         user?.name ||
@@ -42,18 +35,12 @@ export default function Sidebar() {
             .toUpperCase();
 
 
-    // ==========================================
-    // SIDEBAR
-    // ==========================================
+    
 
     return (
 
         <aside className="sidebar">
 
-
-            {/* ==================================
-                LOGO
-            ================================== */}
 
             <div className="logo-section">
 
@@ -68,23 +55,13 @@ export default function Sidebar() {
             </div>
 
 
-            {/* ==================================
-                NAVIGATION
-            ================================== */}
-
             <nav className="nav-menu">
 
-
-                {/* DASHBOARD
-                    Everyone */}
 
                 <Link to="/dashboard">
                     Dashboard
                 </Link>
 
-
-                {/* CUSTOMERS
-                    ADMIN + SALES + ACCOUNTS */}
 
                 {[
                     "ADMIN",
@@ -98,33 +75,9 @@ export default function Sidebar() {
 
                 )}
 
-
-                {/* PRODUCTS
-                    Everyone */}
-
                 <Link to="/products">
                     Products
                 </Link>
-
-
-                {/* INVENTORY
-                    ADMIN + WAREHOUSE + ACCOUNTS */}
-
-                {[
-                    "ADMIN",
-                    "WAREHOUSE",
-                    "ACCOUNTS"
-                ].includes(role) && (
-
-                    <Link to="/inventory">
-                        Inventory
-                    </Link>
-
-                )}
-
-
-                {/* CHALLANS
-                    ADMIN + SALES + WAREHOUSE */}
 
                 {[
                     "ADMIN",
@@ -140,10 +93,6 @@ export default function Sidebar() {
 
             </nav>
 
-
-            {/* ==================================
-                USER / LOGOUT
-            ================================== */}
 
             <div className="sidebar-bottom">
 
