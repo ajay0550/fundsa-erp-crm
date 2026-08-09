@@ -34,7 +34,7 @@ router.get(
 
 router.put(
     "/:id/confirm",
-    authorizeRoles("ADMIN", "WAREHOUSE"),
+    authorizeRoles("ADMIN", "WAREHOUSE", "SALES"),
     confirmChallan
 );
 
