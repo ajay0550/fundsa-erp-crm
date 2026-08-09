@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Customers from "./pages/Customers";
+import Products from "./pages/Products";
 
 function App() {
   return (
@@ -22,6 +24,16 @@ function App() {
         <Route
           path="/login"
           element={<Login />}
+        />
+
+        <Route
+          path="/customers"
+          element={<Customers />}
+        />
+
+        <Route
+          path="/products"
+          element={<Products />}
         />
 
       </Routes>

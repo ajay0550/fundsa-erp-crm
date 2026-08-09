@@ -303,3 +303,131 @@ td {
     font-size: 13px;
     margin-bottom: 18px;
 }
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.primary-button {
+    background: #111827;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 12px 18px;
+    font-size: 14px;
+}
+
+/* Customer Form */
+
+.customer-form {
+    margin-top: 20px;
+}
+
+.customer-form h3 {
+    margin-bottom: 20px;
+}
+
+.customer-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.customer-form input,
+.customer-form select,
+.customer-form textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: white;
+}
+
+.customer-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.customer-form input:focus,
+.customer-form select:focus,
+.customer-form textarea:focus {
+    outline: none;
+    border-color: #111827;
+}
+
+.customer-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.secondary-button {
+    padding: 11px 18px;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.primary-button {
+    padding: 11px 18px;
+    border: none;
+    background: #111827;
+    color: white;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    opacity: 0.9;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-button,
+.delete-button {
+    padding: 7px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.edit-button {
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #111827;
+}
+
+.delete-button {
+    border: 1px solid #fecaca;
+    background: white;
+    color: #dc2626;
+}
+
+.edit-button:hover {
+    background: #f3f4f6;
+}
+
+.delete-button:hover {
+    background: #fef2f2;
+}
+
+.low-stock {
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.stock-ok {
+    color: #16a34a;
+    font-weight: 500;
+}
