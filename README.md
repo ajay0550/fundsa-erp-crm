@@ -145,3 +145,30 @@ When a challan is confirmed:
                                 v
                          PostgreSQL
                            Supabase
+
+## Project Structure
+
+
+fundsa-erp-crm/
+│
+├── backend/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── routes/
+│   ├── db.js
+│   ├── server.js
+│   ├── package.json
+│   └── ...
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── ...
+│   ├── package.json
+│   └── ...
+│
+├── .gitignore
+└── README.md
+
