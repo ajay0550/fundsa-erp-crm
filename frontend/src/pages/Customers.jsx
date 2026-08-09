@@ -301,71 +301,6 @@ export default function Customers() {
 
     
 
-    const handleDelete = async (id) => {
-
-        const confirmed =
-            window.confirm(
-                "Are you sure you want to delete this customer?"
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        try {
-
-            const token =
-                localStorage.getItem("token");
-
-
-            const response = await fetch(
-                `${API_URL}/customers/${id}`,
-                {
-                    method: "DELETE",
-
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`
-                    }
-                }
-            );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    "Failed to delete customer"
-                );
-            }
-
-
-            
-
-            setCustomers(
-
-                customers.filter(
-                    (customer) =>
-                        customer.id !== id
-                )
-
-            );
-
-
-        } catch (error) {
-
-            setError(
-                error.message
-            );
-        }
-    };
-
 
     
 
@@ -970,17 +905,7 @@ export default function Customers() {
                                                 </button>
 
 
-                                                <button
-                                                    className=
-                                                        "delete-button"
-                                                    onClick={() =>
-                                                        handleDelete(
-                                                            customer.id
-                                                        )
-                                                    }
-                                                >
-                                                    Delete
-                                                </button>
+                                                
 
                                             </div>
 
