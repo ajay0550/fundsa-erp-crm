@@ -7,45 +7,45 @@ import Products from "./pages/Products";
 import Challans from "./pages/Challans";
 
 function App() {
-  return (
-    <BrowserRouter>
+    return (
+        <BrowserRouter>
 
-      <Routes>
+            <Routes>
 
-        <Route
-          path="/"
-          element={<Navigate to="/dashboard" />}
-        />
+                <Route
+                    path="/"
+                    element={<Navigate to="/login" replace />}
+                />
 
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+                <Route
+                    path="/dashboard"
+                    element={<Dashboard />}
+                />
 
-        <Route
-          path="/customers"
-          element={<Customers />}
-        />
+                <Route
+                    path="/customers"
+                    element={<Customers />}
+                />
 
-        <Route
-          path="/products"
-          element={<Products />}
-        />
+                <Route
+                    path="/products"
+                    element={<Products />}
+                />
 
-        <Route
-          path="/challans"
-          element={<Challans/>}
-        />
+                <Route
+                    path="/challans"
+                    element={<Challans />}
+                />
 
-      </Routes>
+            </Routes>
 
-    </BrowserRouter>
-  );
+        </BrowserRouter>
+    );
 }
 
 export default App;
