@@ -1,27 +1,33 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
-    return (
-        <BrowserRouter>
+  return (
+    <BrowserRouter>
 
-            <Routes>
+      <Routes>
 
-                <Route
-                    path="/"
-                    element={<Navigate to="/dashboard" />}
-                />
+        <Route
+          path="/"
+          element={<Navigate to="/dashboard" />}
+        />
 
-                <Route
-                    path="/dashboard"
-                    element={<Dashboard />}
-                />
+        <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        />
 
-            </Routes>
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-        </BrowserRouter>
-    );
+      </Routes>
+
+    </BrowserRouter>
+  );
 }
 
 export default App;

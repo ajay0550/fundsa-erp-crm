@@ -221,3 +221,85 @@ td {
     background: #fff4d6;
     color: #92400e;
 }
+
+.login-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f5f6f8;
+}
+
+.login-box {
+    width: 400px;
+
+    background: white;
+    padding: 40px;
+
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.login-header h1 {
+    font-size: 30px;
+}
+
+.login-header p {
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    outline: none;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    border-color: #111827;
+}
+
+.login-button {
+    width: 100%;
+    padding: 13px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #111827;
+    color: white;
+
+    font-size: 15px;
+}
+
+.login-error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
