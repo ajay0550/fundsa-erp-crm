@@ -48,9 +48,7 @@ export default function Products() {
         useState(false);
 
 
-    // ==========================================
-    // GET PRODUCTS
-    // ==========================================
+    
 
     useEffect(() => {
 
@@ -98,9 +96,7 @@ export default function Products() {
     }, []);
 
 
-    // ==========================================
-    // PRODUCT FORM INPUT
-    // ==========================================
+    
 
     const handleChange = (e) => {
 
@@ -113,9 +109,7 @@ export default function Products() {
     };
 
 
-    // ==========================================
-    // OPEN ADD PRODUCT FORM
-    // ==========================================
+    
 
     const openAddForm = () => {
 
@@ -131,9 +125,7 @@ export default function Products() {
     };
 
 
-    // ==========================================
-    // OPEN EDIT PRODUCT FORM
-    // ==========================================
+    
 
     const openEditForm = (product) => {
 
@@ -171,9 +163,6 @@ export default function Products() {
     };
 
 
-    // ==========================================
-    // ADD / UPDATE PRODUCT
-    // ==========================================
 
     const handleSubmit = async (e) => {
 
@@ -194,7 +183,7 @@ export default function Products() {
             let body;
 
 
-            // EDIT
+         
             if (editingProduct) {
 
                 body = {
@@ -225,7 +214,7 @@ export default function Products() {
             }
 
 
-            // ADD
+ 
             else {
 
                 body = {
@@ -295,7 +284,7 @@ export default function Products() {
             }
 
 
-            // UPDATE
+       
             if (editingProduct) {
 
                 setProducts(
@@ -310,7 +299,7 @@ export default function Products() {
             }
 
 
-            // ADD
+       
             else {
 
                 setProducts([
@@ -335,9 +324,7 @@ export default function Products() {
     };
 
 
-    // ==========================================
-    // STOCK MOVEMENT INPUT
-    // ==========================================
+    
 
     const handleMovementChange = (e) => {
 
@@ -350,9 +337,7 @@ export default function Products() {
     };
 
 
-    // ==========================================
-    // CREATE STOCK MOVEMENT
-    // ==========================================
+   
 
     const handleMovementSubmit = async (e) => {
 
@@ -410,7 +395,7 @@ export default function Products() {
             }
 
 
-            // Update stock immediately
+            
             setProducts(
                 products.map((product) => {
 
@@ -456,9 +441,7 @@ export default function Products() {
     };
 
 
-    // ==========================================
-    // GET STOCK MOVEMENTS
-    // ==========================================
+   
 
     const loadMovements = async () => {
 
@@ -510,9 +493,7 @@ export default function Products() {
     };
 
 
-    // ==========================================
-    // LOADING
-    // ==========================================
+    
 
     if (loading) {
 
@@ -528,18 +509,14 @@ export default function Products() {
     }
 
 
-    // ==========================================
-    // PAGE
-    // ==========================================
+    
 
     return (
 
         <Layout>
 
 
-            {/* ==================================
-                HEADER
-            ================================== */}
+          
 
             <div className="page-header">
 
@@ -563,9 +540,7 @@ export default function Products() {
                     }}
                 >
 
-                    {/* STOCK HISTORY
-                        Everyone with access can view it */}
-
+                   
                     <button
                         className="secondary-button"
                         onClick={loadMovements}
@@ -574,8 +549,7 @@ export default function Products() {
                     </button>
 
 
-                    {/* STOCK MOVEMENT
-                        ADMIN + WAREHOUSE only */}
+            
 
                     {hasRole(
                         "ADMIN",
@@ -602,8 +576,7 @@ export default function Products() {
                     )}
 
 
-                    {/* ADD PRODUCT
-                        ADMIN + WAREHOUSE only */}
+                 
 
                     {hasRole(
                         "ADMIN",
@@ -624,9 +597,7 @@ export default function Products() {
             </div>
 
 
-            {/* ==================================
-                ERROR
-            ================================== */}
+         
 
             {error && (
 
@@ -639,9 +610,7 @@ export default function Products() {
             )}
 
 
-            {/* ==================================
-                STOCK HISTORY
-            ================================== */}
+           
 
             {showMovements && (
 
@@ -836,10 +805,7 @@ export default function Products() {
             )}
 
 
-            {/* ==================================
-                STOCK MOVEMENT FORM
-                ADMIN + WAREHOUSE ONLY
-            ================================== */}
+            
 
             {showMovementForm &&
                 hasRole(
@@ -869,7 +835,7 @@ export default function Products() {
                             >
 
 
-                                {/* PRODUCT */}
+                          
 
                                 <div
                                     className=
@@ -931,7 +897,7 @@ export default function Products() {
                                 </div>
 
 
-                                {/* TYPE */}
+                      
 
                                 <div
                                     className=
@@ -968,7 +934,7 @@ export default function Products() {
                                 </div>
 
 
-                                {/* QUANTITY */}
+                            
 
                                 <div
                                     className=
@@ -1000,7 +966,7 @@ export default function Products() {
                                 </div>
 
 
-                                {/* REASON */}
+                              
 
                                 <div
                                     className=
@@ -1065,10 +1031,7 @@ export default function Products() {
                 )}
 
 
-            {/* ==================================
-                ADD / EDIT PRODUCT FORM
-                ADMIN + WAREHOUSE ONLY
-            ================================== */}
+            
 
             {showForm &&
                 hasRole(
@@ -1103,7 +1066,7 @@ export default function Products() {
                             >
 
 
-                                {/* NAME */}
+                          
 
                                 <div
                                     className=
@@ -1132,7 +1095,7 @@ export default function Products() {
                                 </div>
 
 
-                                {/* SKU */}
+                                
 
                                 <div
                                     className=
@@ -1159,7 +1122,7 @@ export default function Products() {
                                 </div>
 
 
-                                {/* CATEGORY */}
+                               
 
                                 <div
                                     className=
@@ -1186,7 +1149,7 @@ export default function Products() {
                                 </div>
 
 
-                                {/* PRICE */}
+                               
 
                                 <div
                                     className=
@@ -1217,7 +1180,6 @@ export default function Products() {
                                 </div>
 
 
-                                {/* CURRENT STOCK */}
 
                                 <div
                                     className=
@@ -1359,9 +1321,7 @@ export default function Products() {
                 )}
 
 
-            {/* ==================================
-                PRODUCTS TABLE
-            ================================== */}
+            
 
             <div
                 className="dashboard-card"

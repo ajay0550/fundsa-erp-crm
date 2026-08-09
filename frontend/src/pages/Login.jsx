@@ -40,10 +40,10 @@ export default function Login() {
                 );
             }
 
-            // Save JWT token
+          
             localStorage.setItem("token", data.token);
 
-            // Go to dashboard
+            
             navigate("/dashboard");
 
         } catch (error) {

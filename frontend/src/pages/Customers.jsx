@@ -32,9 +32,7 @@ export default function Customers() {
         useState(emptyForm);
 
 
-    // ==========================================
-    // GET CUSTOMERS
-    // ==========================================
+    
 
     useEffect(() => {
 
@@ -91,9 +89,7 @@ export default function Customers() {
     }, []);
 
 
-    // ==========================================
-    // HANDLE FORM INPUT
-    // ==========================================
+    
 
     const handleChange = (e) => {
 
@@ -110,9 +106,7 @@ export default function Customers() {
     };
 
 
-    // ==========================================
-    // OPEN ADD FORM
-    // ==========================================
+    
 
     const openAddForm = () => {
 
@@ -126,9 +120,7 @@ export default function Customers() {
     };
 
 
-    // ==========================================
-    // OPEN EDIT FORM
-    // ==========================================
+    
 
     const openEditForm = (customer) => {
 
@@ -162,8 +154,7 @@ export default function Customers() {
                 customer.status || "LEAD",
 
 
-            // Convert PostgreSQL date/timestamp
-            // to yyyy-mm-dd
+            
 
             follow_up_date:
                 customer.follow_up_date
@@ -186,9 +177,7 @@ export default function Customers() {
     };
 
 
-    // ==========================================
-    // ADD OR UPDATE CUSTOMER
-    // ==========================================
+    
 
     const handleSubmit = async (e) => {
 
@@ -250,7 +239,7 @@ export default function Customers() {
             }
 
 
-            // UPDATE
+           
 
             if (editingCustomer) {
 
@@ -272,7 +261,7 @@ export default function Customers() {
             }
 
 
-            // ADD
+            
 
             else {
 
@@ -287,12 +276,12 @@ export default function Customers() {
             }
 
 
-            // Close form
+            
 
             setShowForm(false);
 
 
-            // Reset
+            
 
             setEditingCustomer(null);
 
@@ -310,9 +299,7 @@ export default function Customers() {
     };
 
 
-    // ==========================================
-    // DELETE CUSTOMER
-    // ==========================================
+    
 
     const handleDelete = async (id) => {
 
@@ -359,7 +346,7 @@ export default function Customers() {
             }
 
 
-            // Remove customer
+            
 
             setCustomers(
 
@@ -380,9 +367,7 @@ export default function Customers() {
     };
 
 
-    // ==========================================
-    // LOADING
-    // ==========================================
+    
 
     if (loading) {
 
@@ -400,18 +385,14 @@ export default function Customers() {
     }
 
 
-    // ==========================================
-    // PAGE
-    // ==========================================
+    
 
     return (
 
         <Layout>
 
 
-            {/* ==================================
-                HEADER
-            ================================== */}
+            
 
             <div className="page-header">
 
@@ -428,7 +409,7 @@ export default function Customers() {
                 </div>
 
 
-                {/* ADMIN + SALES ONLY */}
+                
 
                 {hasRole(
                     "ADMIN",
@@ -447,9 +428,7 @@ export default function Customers() {
             </div>
 
 
-            {/* ==================================
-                ERROR
-            ================================== */}
+            
 
             {error && (
 
@@ -462,10 +441,7 @@ export default function Customers() {
             )}
 
 
-            {/* ==================================
-                FORM
-                ADMIN + SALES ONLY
-            ================================== */}
+            
 
             {showForm &&
                 hasRole(
@@ -500,7 +476,7 @@ export default function Customers() {
                             >
 
 
-                                {/* CUSTOMER NAME */}
+                              
 
                                 <div
                                     className=
@@ -529,7 +505,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* MOBILE */}
+                             
 
                                 <div
                                     className=
@@ -556,7 +532,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* EMAIL */}
+                       
 
                                 <div
                                     className=
@@ -583,7 +559,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* BUSINESS */}
+                               
 
                                 <div
                                     className=
@@ -611,7 +587,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* GST */}
+                                
 
                                 <div
                                     className=
@@ -639,7 +615,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* CUSTOMER TYPE */}
+                               
 
                                 <div
                                     className=
@@ -686,7 +662,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* ADDRESS */}
+                                
 
                                 <div
                                     className=
@@ -713,7 +689,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* STATUS */}
+                               
 
                                 <div
                                     className=
@@ -758,7 +734,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* FOLLOW UP */}
+                                
 
                                 <div
                                     className=
@@ -785,7 +761,7 @@ export default function Customers() {
                                 </div>
 
 
-                                {/* NOTES */}
+                                
 
                                 <div
                                     className=
@@ -813,7 +789,7 @@ export default function Customers() {
                             </div>
 
 
-                            {/* FORM BUTTONS */}
+                            
 
                             <div
                                 className=
@@ -866,9 +842,7 @@ export default function Customers() {
                 )}
 
 
-            {/* ==================================
-                CUSTOMER TABLE
-            ================================== */}
+            
 
             <div
                 className="dashboard-card"
