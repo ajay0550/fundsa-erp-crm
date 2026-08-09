@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import API_URL from "../services/api";
+import { hasRole } from "../utils/auth";
 
 const emptyProductForm = {
     product_name: "",
@@ -189,7 +190,6 @@ export default function Products() {
             const method = editingProduct
                 ? "PUT"
                 : "POST";
-
 
             let body;
 
@@ -563,6 +563,9 @@ export default function Products() {
                     }}
                 >
 
+                    {/* STOCK HISTORY
+                        Everyone with access can view it */}
+
                     <button
                         className="secondary-button"
                         onClick={loadMovements}
@@ -571,28 +574,50 @@ export default function Products() {
                     </button>
 
 
-                    <button
-                        className="secondary-button"
-                        onClick={() => {
+                    {/* STOCK MOVEMENT
+                        ADMIN + WAREHOUSE only */}
 
-                            setShowMovementForm(true);
+                    {hasRole(
+                        "ADMIN",
+                        "WAREHOUSE"
+                    ) && (
 
-                            setShowForm(false);
+                        <button
+                            className="secondary-button"
+                            onClick={() => {
 
-                            setError("");
+                                setShowMovementForm(
+                                    true
+                                );
 
-                        }}
-                    >
-                        Stock Movement
-                    </button>
+                                setShowForm(false);
+
+                                setError("");
+
+                            }}
+                        >
+                            Stock Movement
+                        </button>
+
+                    )}
 
 
-                    <button
-                        className="primary-button"
-                        onClick={openAddForm}
-                    >
-                        Add Product
-                    </button>
+                    {/* ADD PRODUCT
+                        ADMIN + WAREHOUSE only */}
+
+                    {hasRole(
+                        "ADMIN",
+                        "WAREHOUSE"
+                    ) && (
+
+                        <button
+                            className="primary-button"
+                            onClick={openAddForm}
+                        >
+                            Add Product
+                        </button>
+
+                    )}
 
                 </div>
 
@@ -645,7 +670,9 @@ export default function Products() {
                         <button
                             className="secondary-button"
                             onClick={() =>
-                                setShowMovements(false)
+                                setShowMovements(
+                                    false
+                                )
                             }
                         >
                             Close
@@ -745,27 +772,31 @@ export default function Products() {
 
                                             <td>
 
-                                                {movement
-                                                    .movement_type ===
-                                                "IN" ? (
+                                                {
+                                                    movement
+                                                        .movement_type ===
+                                                    "IN"
+                                                    ? (
 
-                                                    <span
-                                                        className=
-                                                            "stock-ok"
-                                                    >
-                                                        IN
-                                                    </span>
+                                                        <span
+                                                            className=
+                                                                "stock-ok"
+                                                        >
+                                                            IN
+                                                        </span>
 
-                                                ) : (
+                                                    )
+                                                    : (
 
-                                                    <span
-                                                        className=
-                                                            "low-stock"
-                                                    >
-                                                        OUT
-                                                    </span>
+                                                        <span
+                                                            className=
+                                                                "low-stock"
+                                                        >
+                                                            OUT
+                                                        </span>
 
-                                                )}
+                                                    )
+                                                }
 
                                             </td>
 
@@ -807,497 +838,525 @@ export default function Products() {
 
             {/* ==================================
                 STOCK MOVEMENT FORM
+                ADMIN + WAREHOUSE ONLY
             ================================== */}
 
-            {showMovementForm && (
+            {showMovementForm &&
+                hasRole(
+                    "ADMIN",
+                    "WAREHOUSE"
+                ) && (
 
-                <div
-                    className=
-                        "dashboard-card customer-form"
-                >
-
-                    <h3>
-                        Stock Movement
-                    </h3>
-
-
-                    <form
-                        onSubmit={
-                            handleMovementSubmit
-                        }
+                    <div
+                        className=
+                            "dashboard-card customer-form"
                     >
 
-                        <div
-                            className=
-                                "customer-form-grid"
+                        <h3>
+                            Stock Movement
+                        </h3>
+
+
+                        <form
+                            onSubmit={
+                                handleMovementSubmit
+                            }
                         >
 
-
-                            {/* PRODUCT */}
-
                             <div
-                                className="form-group"
+                                className=
+                                    "customer-form-grid"
                             >
 
-                                <label>
-                                    Product
-                                </label>
 
+                                {/* PRODUCT */}
 
-                                <select
-                                    name="product_id"
-                                    value={
-                                        movementData
-                                            .product_id
-                                    }
-                                    onChange={
-                                        handleMovementChange
-                                    }
-                                    required
+                                <div
+                                    className=
+                                        "form-group"
                                 >
 
-                                    <option value="">
-                                        Select Product
-                                    </option>
+                                    <label>
+                                        Product
+                                    </label>
 
 
-                                    {products.map(
-                                        (product) => (
+                                    <select
+                                        name="product_id"
+                                        value={
+                                            movementData
+                                                .product_id
+                                        }
+                                        onChange={
+                                            handleMovementChange
+                                        }
+                                        required
+                                    >
 
-                                            <option
-                                                key={
-                                                    product.id
-                                                }
-                                                value={
-                                                    product.id
-                                                }
-                                            >
+                                        <option value="">
+                                            Select Product
+                                        </option>
 
-                                                {
-                                                    product.product_name
-                                                }
 
-                                                {" — "}
+                                        {products.map(
+                                            (product) => (
 
-                                                {
-                                                    product.sku
-                                                }
+                                                <option
+                                                    key={
+                                                        product.id
+                                                    }
+                                                    value={
+                                                        product.id
+                                                    }
+                                                >
 
-                                            </option>
+                                                    {
+                                                        product
+                                                            .product_name
+                                                    }
 
+                                                    {" — "}
+
+                                                    {
+                                                        product.sku
+                                                    }
+
+                                                </option>
+
+                                            )
+                                        )}
+
+                                    </select>
+
+                                </div>
+
+
+                                {/* TYPE */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Movement Type
+                                    </label>
+
+
+                                    <select
+                                        name=
+                                            "movement_type"
+                                        value={
+                                            movementData
+                                                .movement_type
+                                        }
+                                        onChange={
+                                            handleMovementChange
+                                        }
+                                    >
+
+                                        <option value="IN">
+                                            IN — Stock Received
+                                        </option>
+
+                                        <option value="OUT">
+                                            OUT — Stock Removed
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                {/* QUANTITY */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Quantity
+                                    </label>
+
+
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        name=
+                                            "quantity_changed"
+                                        placeholder=
+                                            "Enter quantity"
+                                        value={
+                                            movementData
+                                                .quantity_changed
+                                        }
+                                        onChange={
+                                            handleMovementChange
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+
+                                {/* REASON */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Reason
+                                    </label>
+
+
+                                    <input
+                                        name="reason"
+                                        placeholder=
+                                            "Purchase / Return / Damage"
+                                        value={
+                                            movementData.reason
+                                        }
+                                        onChange={
+                                            handleMovementChange
+                                        }
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                className=
+                                    "customer-form-actions"
+                            >
+
+                                <button
+                                    type="button"
+                                    className=
+                                        "secondary-button"
+                                    onClick={() =>
+                                        setShowMovementForm(
+                                            false
                                         )
-                                    )}
-
-                                </select>
-
-                            </div>
-
-
-                            {/* TYPE */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Movement Type
-                                </label>
-
-
-                                <select
-                                    name="movement_type"
-                                    value={
-                                        movementData
-                                            .movement_type
-                                    }
-                                    onChange={
-                                        handleMovementChange
                                     }
                                 >
-
-                                    <option value="IN">
-                                        IN — Stock Received
-                                    </option>
-
-                                    <option value="OUT">
-                                        OUT — Stock Removed
-                                    </option>
-
-                                </select>
-
-                            </div>
+                                    Cancel
+                                </button>
 
 
-                            {/* QUANTITY */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Quantity
-                                </label>
-
-
-                                <input
-                                    type="number"
-                                    min="1"
-                                    name=
-                                        "quantity_changed"
-                                    placeholder=
-                                        "Enter quantity"
-                                    value={
-                                        movementData
-                                            .quantity_changed
-                                    }
-                                    onChange={
-                                        handleMovementChange
-                                    }
-                                    required
-                                />
+                                <button
+                                    type="submit"
+                                    className=
+                                        "primary-button"
+                                >
+                                    Record Movement
+                                </button>
 
                             </div>
 
+                        </form>
 
-                            {/* REASON */}
+                    </div>
 
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Reason
-                                </label>
-
-
-                                <input
-                                    name="reason"
-                                    placeholder=
-                                        "Purchase / Return / Damage"
-                                    value={
-                                        movementData.reason
-                                    }
-                                    onChange={
-                                        handleMovementChange
-                                    }
-                                />
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            className=
-                                "customer-form-actions"
-                        >
-
-                            <button
-                                type="button"
-                                className=
-                                    "secondary-button"
-                                onClick={() =>
-                                    setShowMovementForm(
-                                        false
-                                    )
-                                }
-                            >
-                                Cancel
-                            </button>
-
-
-                            <button
-                                type="submit"
-                                className=
-                                    "primary-button"
-                            >
-                                Record Movement
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            )}
+                )}
 
 
             {/* ==================================
                 ADD / EDIT PRODUCT FORM
+                ADMIN + WAREHOUSE ONLY
             ================================== */}
 
-            {showForm && (
+            {showForm &&
+                hasRole(
+                    "ADMIN",
+                    "WAREHOUSE"
+                ) && (
 
-                <div
-                    className=
-                        "dashboard-card customer-form"
-                >
-
-                    <h3>
-
-                        {editingProduct
-                            ? "Edit Product"
-                            : "Add Product"
-                        }
-
-                    </h3>
-
-
-                    <form
-                        onSubmit={
-                            handleSubmit
-                        }
+                    <div
+                        className=
+                            "dashboard-card customer-form"
                     >
 
-                        <div
-                            className=
-                                "customer-form-grid"
+                        <h3>
+
+                            {editingProduct
+                                ? "Edit Product"
+                                : "Add Product"
+                            }
+
+                        </h3>
+
+
+                        <form
+                            onSubmit={
+                                handleSubmit
+                            }
                         >
 
-
-                            {/* NAME */}
-
                             <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Product Name
-                                </label>
-
-                                <input
-                                    name="product_name"
-                                    placeholder=
-                                        "Enter product name"
-                                    value={
-                                        formData
-                                            .product_name
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    required
-                                />
-
-                            </div>
-
-
-                            {/* SKU */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    SKU
-                                </label>
-
-                                <input
-                                    name="sku"
-                                    placeholder=
-                                        "Enter SKU"
-                                    value={
-                                        formData.sku
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    required
-                                />
-
-                            </div>
-
-
-                            {/* CATEGORY */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Category
-                                </label>
-
-                                <input
-                                    name="category"
-                                    placeholder=
-                                        "Enter category"
-                                    value={
-                                        formData.category
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                />
-
-                            </div>
-
-
-                            {/* PRICE */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Unit Price
-                                </label>
-
-                                <input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    name="unit_price"
-                                    placeholder=
-                                        "Enter price"
-                                    value={
-                                        formData
-                                            .unit_price
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    required
-                                />
-
-                            </div>
-
-
-                            {/* CURRENT STOCK */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Current Stock
-                                </label>
-
-
-                                <input
-                                    type="number"
-                                    min="0"
-                                    name=
-                                        "current_stock"
-                                    value={
-                                        formData
-                                            .current_stock
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                    disabled={
-                                        !!editingProduct
-                                    }
-                                />
-
-                            </div>
-
-
-                            {/* MIN STOCK */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Minimum Stock
-                                </label>
-
-                                <input
-                                    type="number"
-                                    min="0"
-                                    name=
-                                        "min_stock_quantity"
-                                    placeholder=
-                                        "Enter minimum stock"
-                                    value={
-                                        formData
-                                            .min_stock_quantity
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                />
-
-                            </div>
-
-
-                            {/* LOCATION */}
-
-                            <div
-                                className="form-group"
-                            >
-
-                                <label>
-                                    Location
-                                </label>
-
-                                <input
-                                    name="location"
-                                    placeholder=
-                                        "Example: A1"
-                                    value={
-                                        formData.location
-                                    }
-                                    onChange={
-                                        handleChange
-                                    }
-                                />
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            className=
-                                "customer-form-actions"
-                        >
-
-                            <button
-                                type="button"
                                 className=
-                                    "secondary-button"
-                                onClick={() => {
-
-                                    setShowForm(false);
-
-                                    setEditingProduct(
-                                        null
-                                    );
-
-                                    setFormData(
-                                        emptyProductForm
-                                    );
-
-                                }}
+                                    "customer-form-grid"
                             >
-                                Cancel
-                            </button>
 
 
-                            <button
-                                type="submit"
+                                {/* NAME */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Product Name
+                                    </label>
+
+                                    <input
+                                        name=
+                                            "product_name"
+                                        placeholder=
+                                            "Enter product name"
+                                        value={
+                                            formData
+                                                .product_name
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+
+                                {/* SKU */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        SKU
+                                    </label>
+
+                                    <input
+                                        name="sku"
+                                        placeholder=
+                                            "Enter SKU"
+                                        value={
+                                            formData.sku
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+
+                                {/* CATEGORY */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Category
+                                    </label>
+
+                                    <input
+                                        name="category"
+                                        placeholder=
+                                            "Enter category"
+                                        value={
+                                            formData
+                                                .category
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* PRICE */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Unit Price
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="0.01"
+                                        name="unit_price"
+                                        placeholder=
+                                            "Enter price"
+                                        value={
+                                            formData
+                                                .unit_price
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        required
+                                    />
+
+                                </div>
+
+
+                                {/* CURRENT STOCK */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Current Stock
+                                    </label>
+
+
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        name=
+                                            "current_stock"
+                                        value={
+                                            formData
+                                                .current_stock
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                        disabled={
+                                            !!editingProduct
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* MIN STOCK */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Minimum Stock
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        name=
+                                            "min_stock_quantity"
+                                        placeholder=
+                                            "Enter minimum stock"
+                                        value={
+                                            formData
+                                                .min_stock_quantity
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+
+                                {/* LOCATION */}
+
+                                <div
+                                    className=
+                                        "form-group"
+                                >
+
+                                    <label>
+                                        Location
+                                    </label>
+
+                                    <input
+                                        name="location"
+                                        placeholder=
+                                            "Example: A1"
+                                        value={
+                                            formData
+                                                .location
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
+                                    />
+
+                                </div>
+
+                            </div>
+
+
+                            <div
                                 className=
-                                    "primary-button"
+                                    "customer-form-actions"
                             >
 
-                                {editingProduct
-                                    ? "Save Changes"
-                                    : "Add Product"
-                                }
+                                <button
+                                    type="button"
+                                    className=
+                                        "secondary-button"
+                                    onClick={() => {
 
-                            </button>
+                                        setShowForm(
+                                            false
+                                        );
 
-                        </div>
+                                        setEditingProduct(
+                                            null
+                                        );
 
-                    </form>
+                                        setFormData(
+                                            emptyProductForm
+                                        );
 
-                </div>
+                                    }}
+                                >
+                                    Cancel
+                                </button>
 
-            )}
+
+                                <button
+                                    type="submit"
+                                    className=
+                                        "primary-button"
+                                >
+
+                                    {editingProduct
+                                        ? "Save Changes"
+                                        : "Add Product"
+                                    }
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                )}
 
 
             {/* ==================================
@@ -1434,17 +1493,24 @@ export default function Products() {
 
                                     <td>
 
-                                        <button
-                                            className=
-                                                "edit-button"
-                                            onClick={() =>
-                                                openEditForm(
-                                                    product
-                                                )
-                                            }
-                                        >
-                                            Edit
-                                        </button>
+                                        {hasRole(
+                                            "ADMIN",
+                                            "WAREHOUSE"
+                                        ) && (
+
+                                            <button
+                                                className=
+                                                    "edit-button"
+                                                onClick={() =>
+                                                    openEditForm(
+                                                        product
+                                                    )
+                                                }
+                                            >
+                                                Edit
+                                            </button>
+
+                                        )}
 
                                     </td>
 

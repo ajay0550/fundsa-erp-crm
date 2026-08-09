@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Customers from "./pages/Customers";
 import Products from "./pages/Products";
+import Challans from "./pages/Challans";
 
 function App() {
   return (
@@ -34,6 +35,11 @@ function App() {
         <Route
           path="/products"
           element={<Products />}
+        />
+
+        <Route
+          path="/challans"
+          element={<Challans/>}
         />
 
       </Routes>
