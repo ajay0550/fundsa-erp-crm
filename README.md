@@ -654,6 +654,19 @@ This demonstrates the relationship between CRM, product management, sales operat
 
 ---
 
+## Test Credentials
+
+The following demo accounts are available for testing role-based access:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@fundsa.com | Admin@123 |
+| Sales | sales@fundsa.com | Sales@123 |
+| Warehouse | warehouse@fundsa.com | Warehouse@123 |
+| Accounts | accounts@fundsa.com | Accounts@123 |
+
+> These credentials are demo/test accounts created specifically for evaluation of the application.
+
 ## Security
 
 The application uses:
